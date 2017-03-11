@@ -15,14 +15,22 @@ unzip /tmp/scripts-master.zip -d /tmp
 # move shell scripts to /root
 find /tmp/scripts-master/ -type f -name '*.sh' -exec mv -i {} /root/  \;
 
+# custom scripts
+####
+
+# call custom install script
+source /root/custom.sh
+
 # pacman packages
 ####
 
 # define pacman packages
-pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify gnu-netcat python2-pip nano gcc pkg-config freetype2"
+pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2"
 
-# install pre-reqs
-pacman -S --needed $pacman_packages --noconfirm
+# install compiled packages using pacman
+if [[ ! -z "${pacman_packages}" ]]; then
+	pacman -S --needed $pacman_packages --noconfirm
+fi
 
 #install flextget
 pip2 install --upgrade pip
@@ -34,7 +42,7 @@ pip2 install --upgrade flexget
 ####
 
 # define arch official repo (aor) packages
-aor_packages=""
+aor_packages="deluge"
 
 # call aor script (arch official repo)
 source /root/aor.sh
@@ -42,24 +50,11 @@ source /root/aor.sh
 # aur packages
 ####
 
-# define aur helper
-aur_helper="apacman"
-
 # define aur packages
 aur_packages=""
 
 # call aur install script (arch user repo)
 source /root/aur.sh
-
-# call custom install script
-source /root/custom.sh
-
-# config
-####
-
-# manually remove .dev0 from compiled package name (is a result of pull commit from github)
-mv "/usr/lib/python2.7/site-packages/deluge-1.3.13.dev0-py2.7.egg-info/" "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/"
-sed -i -e 's~\.dev0~~g' "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/PKG-INFO" "/usr/bin/deluge" "/usr/bin/deluge-console" "/usr/bin/deluged" "/usr/bin/deluge-gtk" "/usr/bin/deluge-web"
 
 # container perms
 ####
@@ -69,10 +64,16 @@ cat <<'EOF' > /tmp/permissions_heredoc
 echo "[info] Setting permissions on files/folders inside container..." | ts '%Y-%m-%d %H:%M:%.S'
 mkdir -p /home/nobody/.cache
 mkdir -p /home/nobody/.flexget
+
+# create path to store deluge python eggs
+mkdir -p /home/nobody/.cache/Python-Eggs
+
 chown -R "${PUID}":"${PGID}" /usr/bin/deluged /usr/bin/deluge-web /usr/bin/privoxy /etc/privoxy /home/nobody /home/nobody/.flexget /home/nobody/.cache
 chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /usr/bin/privoxy /etc/privoxy /home/nobody /home/nobody/.flexget /home/nobody/.cache
-# set python.eggs folder to rx only for group and others
-mkdir -p /home/nobody/.python-eggs && chmod -R 755 /home/nobody/.python-eggs
+
+# remove permissions for group and other from the Python-Eggs folder
+chmod -R 700 /home/nobody/.cache/Python-Eggs
+
 EOF
 
 # replace permissions placeholder string with contents of file (here doc)
@@ -86,12 +87,15 @@ rm /tmp/permissions_heredoc
 ####
 
 cat <<'EOF' > /tmp/envvars_heredoc
+
 # check for presence of network interface docker0
 check_network=$(ifconfig | grep docker0 || true)
+
 # if network interface docker0 is present then we are running in host mode and thus must exit
 if [[ ! -z "${check_network}" ]]; then
 	echo "[crit] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
 fi
+
 export VPN_ENABLED=$(echo "${VPN_ENABLED}" | sed -e 's/^[ \t]*//')
 if [[ ! -z "${VPN_ENABLED}" ]]; then
 	echo "[info] VPN_ENABLED defined as '${VPN_ENABLED}'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -99,6 +103,7 @@ else
 	echo "[warn] VPN_ENABLED not defined,(via -e VPN_ENABLED), defaulting to 'yes'" | ts '%Y-%m-%d %H:%M:%.S'
 	export VPN_ENABLED="yes"
 fi
+
 if [[ $VPN_ENABLED == "yes" ]]; then
 	export VPN_PROV=$(echo "${VPN_PROV}" | sed -e 's/^[ \t]*//')
 	if [[ ! -z "${VPN_PROV}" ]]; then

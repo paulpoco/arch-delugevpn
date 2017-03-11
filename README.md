@@ -38,6 +38,8 @@ docker run -d \
     --cap-add=NET_ADMIN \
     -p 8112:8112 \
     -p 8118:8118 \
+    -p 58846:58846 \
+    -p 58946:58946 \
     --name=<container name> \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
@@ -54,6 +56,7 @@ docker run -d \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e NAME_SERVERS=<name server ip(s)> \
     -e DEBUG=<true|false> \
+    -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
     binhex/arch-delugevpn
@@ -79,6 +82,8 @@ PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOT
      --cap-add=NET_ADMIN \
      -p 8112:8112 \
      -p 8118:8118 \
+     -p 58846:58846 \
+     -p 58946:58946 \
      --name=delugevpn \
      -v /apps/docker/deluge/data:/data \
      -v /apps/docker/deluge/config:/config \
@@ -96,6 +101,7 @@ PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOT
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
      -e DEBUG=false \
+     -e UMASK=000 \
      -e PUID=0 \
      -e PGID=0 \
      binhex/arch-delugevpn
@@ -118,6 +124,8 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      --cap-add=NET_ADMIN \
      -p 8112:8112 \
      -p 8118:8118 \
+     -p 58846:58846 \
+     -p 58946:58946 \
      --name=delugevpn \
      -v /apps/docker/deluge/data:/data \
      -v /apps/docker/deluge/config:/config \
@@ -132,6 +140,7 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
      -e DEBUG=false \
+     -e UMASK=000 \
      -e PUID=0 \
      -e PGID=0 \
      binhex/arch-delugevpn
