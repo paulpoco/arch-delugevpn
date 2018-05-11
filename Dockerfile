@@ -5,19 +5,19 @@ MAINTAINER paulpoco
 ##################
 
 # add supervisor conf file for app
-ADD setup/*.conf /etc/supervisor/conf.d/
+ADD build/*.conf /etc/supervisor/conf.d/
 
 # add bash scripts to install app
-ADD setup/root/*.sh /root/
+ADD build/root/*.sh /root/
 
 # add bash script to setup iptables
 ADD apps/root/*.sh /root/
 
 # add bash script to run deluge & flexget
-ADD apps/nobody/*.sh /home/nobody/
+ADD run/nobody/*.sh /home/nobody/
 
 # add python script to configure deluge
-ADD apps/nobody/*.py /home/nobody/
+ADD run/nobody/*.py /home/nobody/
 
 # add pre-configured config files for deluge
 ADD config/nobody/ /home/nobody/
