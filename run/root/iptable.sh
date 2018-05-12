@@ -10,7 +10,7 @@ IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	echo "[info] Adding ${lan_network_item} as route via docker eth0"
 	ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
@@ -101,7 +101,7 @@ iptables -A INPUT -i eth0 -p tcp --sport 3539 -j ACCEPT
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept input to deluge daemon port - used for lan access
 	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport 58846 -j ACCEPT
@@ -159,7 +159,7 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 3539 -j ACCEPT
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept output to deluge daemon port - used for lan access
 	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 58846 -j ACCEPT
