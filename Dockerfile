@@ -1,4 +1,4 @@
-FROM binhex/arch-openvpn
+FROM binhex/arch-openvpn:latest
 MAINTAINER paulpoco
 
 # additional files
