@@ -52,6 +52,8 @@ source /root/aur.sh
 # start flexget stuff
 mkdir -p /home/nobody/.cache
 mkdir -p /home/nobody/.flexget
+mkdir -p /home/nobody/.cache/pip
+mkdir -p /home/nobody/.cache/http
 # end flexget stuff
 
 # create path to store deluge python eggs
@@ -68,7 +70,7 @@ chmod -R 700 /home/nobody/.cache/Python-Eggs
 ####
 
 # define comma separated list of paths
-install_paths="/etc/privoxy,/home/nobody"
+install_paths="/etc/privoxy,/home/nobody,/home/nobody/.cache,/home/nobody/.cache/pip,/home/nobody/.flexget,/home/nobody/.cache/http"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
