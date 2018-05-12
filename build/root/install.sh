@@ -14,7 +14,7 @@ source /root/custom.sh
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
-pacman_packages="python2-twisted freetype2 unzip unrar pygtk python2-service-identity python2-mako python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config"
+pacman_packages="pygtk python2-service-identity python2-mako python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -23,8 +23,8 @@ fi
 
 # start install flextget
 pip2 install --upgrade pip
-# pip2 install --upgrade --force-reinstall requests[security]
 pip2 install --upgrade setuptools
+pip2 install --upgrade --force-reinstall requests[security]
 pip2 install --upgrade flexget
 # end install flexget
 
