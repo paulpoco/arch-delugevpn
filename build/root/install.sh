@@ -115,7 +115,10 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	if (( ${exit_code_chown} != 0 || ${exit_code_chmod} != 0 )); then
 		echo "[warn] Unable to chown/chmod /config/openvpn/, assuming SMB mountpoint" | ts '%Y-%m-%d %H:%M:%.S'
 	fi
-	
+
+        # force removal of mac os resource fork files in ovpn folder
+	rm -rf /config/openvpn/._*.ovpn
+
 	# wildcard search for openvpn config files (match on first result)
 	export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
 	
