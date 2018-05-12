@@ -22,9 +22,15 @@ if [[ "${VPN_ENABLED}" == "no" ]]; then
 	# set listen interface ip address for deluge using python script
 	/home/nobody/config_deluge.py "${deluge_ip}"
 
-	# run Deluge (non daemonized, blocking)
+	# run deluge daemon (daemonized, non-blocking)
 	echo "[info] Attempting to start Deluge..."
-	/usr/bin/deluged -d -c /config -L info -l /config/deluged.log
+	/usr/bin/deluged -c /config -L info -l /config/deluged.log
+	
+	# run script to check we don't have any torrents in an error state
+	/home/nobody/torrentcheck.sh
+	
+	# run cat to prevent script exit
+	cat
 
 else
 
@@ -175,7 +181,10 @@ else
 				fi
 
 				echo "[info] Deluge started"
-
+                                
+				# run script to check we don't have any torrents in an error state
+				/home/nobody/torrentcheck.sh
+				
 			fi
 
 			# set deluge ip and port to current vpn ip and port (used when checking for changes on next run)
