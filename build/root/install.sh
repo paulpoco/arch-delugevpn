@@ -14,7 +14,7 @@ source /root/custom.sh
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
-pacman_packages="pygtk python2-service-identity python2-mako python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config"
+pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -23,8 +23,8 @@ fi
 
 # start install flextget
 pip2 install --upgrade pip
-pip2 install --upgrade setuptools
 pip2 install --upgrade --force-reinstall requests[security]
+pip2 install --upgrade setuptools
 pip2 install --upgrade flexget
 # end install flexget
 
@@ -52,8 +52,6 @@ source /root/aur.sh
 # start flexget stuff
 mkdir -p /home/nobody/.cache
 mkdir -p /home/nobody/.flexget
-mkdir -p /home/nobody/.cache/pip
-mkdir -p /home/nobody/.cache/http
 # end flexget stuff
 
 # create path to store deluge python eggs
@@ -70,7 +68,7 @@ chmod -R 700 /home/nobody/.cache/Python-Eggs
 ####
 
 # define comma separated list of paths
-install_paths="/etc/privoxy,/home/nobody,/home/nobody/.cache,/home/nobody/.cache/pip,/home/nobody/.flexget,/home/nobody/.cache/http"
+install_paths="/etc/privoxy,/home/nobody"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
@@ -94,24 +92,19 @@ chmod -R 775 ${install_paths}
 # create file with contents of here doc, note EOF is NOT quoted to allow us to expand current variable 'install_paths'
 # we use escaping to prevent variable expansion for PUID and PGID, as we want these expanded at runtime of init.sh
 cat <<EOF > /tmp/permissions_heredoc
-
 # get previous puid/pgid (if first run then will be empty string)
 previous_puid=$(cat "/tmp/puid" 2>/dev/null)
 previous_pgid=$(cat "/tmp/pgid" 2>/dev/null)
-
 # if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different 
 # from the previous run then re-apply chown with current PUID and PGID values.
 if [[ ! -f "/tmp/puid" || ! -f "/tmp/pgid" || "\${previous_puid}" != "\${PUID}" || "\${previous_pgid}" != "\${PGID}" ]]; then
-
        # set permissions inside container - Do NOT double quote variable for install_paths otherwise this will wrap space separated paths as a single string
        chown -R "\${PUID}":"\${PGID}" ${install_paths}
        
 fi
-
 # write out current PUID and PGID to files in /tmp (used to compare on next run)
 echo "\${PUID}" > /tmp/puid
 echo "\${PGID}" > /tmp/pgid
-
 EOF
 
 # nothing below here has to do with flexget
@@ -127,15 +120,12 @@ rm /tmp/permissions_heredoc
 ####
 
 cat <<'EOF' > /tmp/envvars_heredoc
-
 # check for presence of network interface docker0
 check_network=$(ifconfig | grep docker0 || true)
-
 # if network interface docker0 is present then we are running in host mode and thus must exit
 if [[ ! -z "${check_network}" ]]; then
 	echo "[crit] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
 fi
-
 export VPN_ENABLED=$(echo "${VPN_ENABLED}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 if [[ ! -z "${VPN_ENABLED}" ]]; then
 	echo "[info] VPN_ENABLED defined as '${VPN_ENABLED}'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -143,9 +133,7 @@ else
 	echo "[warn] VPN_ENABLED not defined,(via -e VPN_ENABLED), defaulting to 'yes'" | ts '%Y-%m-%d %H:%M:%.S'
 	export VPN_ENABLED="yes"
 fi
-
 if [[ $VPN_ENABLED == "yes" ]]; then
-
 	# create directory to store openvpn config files
 	mkdir -p /config/openvpn
 	# set perms and owner for files in /config/openvpn directory
@@ -159,10 +147,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	if (( ${exit_code_chown} != 0 || ${exit_code_chmod} != 0 )); then
 		echo "[warn] Unable to chown/chmod /config/openvpn/, assuming SMB mountpoint" | ts '%Y-%m-%d %H:%M:%.S'
 	fi
-
         # force removal of mac os resource fork files in ovpn folder
 	rm -rf /config/openvpn/._*.ovpn
-
 	# wildcard search for openvpn config files (match on first result)
 	export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
 	
@@ -309,7 +295,6 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 elif [[ $VPN_ENABLED == "no" ]]; then
 	echo "[warn] !!IMPORTANT!! You have set the VPN to disabled, you will NOT be secure!" | ts '%Y-%m-%d %H:%M:%.S'
 fi
-
 EOF
 
 # replace env vars placeholder string with contents of file (here doc)
