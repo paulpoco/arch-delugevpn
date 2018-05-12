@@ -23,7 +23,7 @@ fi
 
 # start install flextget
 pip2 install --upgrade pip
-pip2 install --upgrade --force-reinstall requests[security]
+pip2 install --upgrade requests[security]
 pip2 install --upgrade setuptools
 pip2 install --upgrade flexget
 # end install flexget
