@@ -52,6 +52,9 @@ docker run -d \
     -e VPN_PROTOCOL=<vpn remote protocol> \
     -e VPN_DEVICE_TYPE=<tun|tap> \
     -e VPN_PROV=<pia|airvpn|custom> \
+    -e VPN_OPTIONS=<additional openvpn cli options> \
+    -e STRONG_CERTS=<yes|no> \
+    -e STRICT_PORT_FORWARD=<yes|no> \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e NAME_SERVERS=<name server ip(s)> \
@@ -97,6 +100,7 @@ PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOT
      -e VPN_DEVICE_TYPE=tun \
      -e VPN_PROV=pia \
      -e STRONG_CERTS=no \
+     -e STRICT_PORT_FORWARD=yes \
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
