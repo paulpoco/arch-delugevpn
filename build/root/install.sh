@@ -52,6 +52,8 @@ source /root/aur.sh
 # start flexget stuff
 mkdir -p /home/nobody/.cache
 mkdir -p /home/nobody/.flexget
+mkdir -p /home/nobody/.cache/pip
+mkdir -p /home/nobody/.cache/pip/http
 # end flexget stuff
 
 # create path to store deluge python eggs
