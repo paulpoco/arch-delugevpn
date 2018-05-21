@@ -68,7 +68,7 @@ chmod -R 700 /home/nobody/.cache/Python-Eggs
 ####
 
 # define comma separated list of paths
-install_paths="/etc/privoxy,/home/nobody"
+install_paths="/etc/privoxy,/home/nobody,/home/nobody/.cache,/home/nobody/.flexget"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
