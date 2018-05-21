@@ -21,14 +21,6 @@ if [[ ! -z "${pacman_packages}" ]]; then
 	pacman -S --needed $pacman_packages --noconfirm
 fi
 
-# start install flextget
-pip2 install --upgrade pip
-pip2 install --upgrade funcsigs
-pip2 install --upgrade requests[security]
-pip2 install --upgrade setuptools
-pip2 install --upgrade flexget
-# end install flexget
-
 # aor packages
 ####
 
@@ -55,6 +47,15 @@ mkdir -p /home/nobody/.cache
 mkdir -p /home/nobody/.flexget
 mkdir -p /home/nobody/.cache/pip
 mkdir -p /home/nobody/.cache/pip/http
+
+# start install flextget
+pip2 install --upgrade pip
+pip2 install --upgrade funcsigs
+pip2 install --upgrade requests[security]
+pip2 install --upgrade setuptools
+pip2 install --upgrade flexget
+# end install flexget
+
 # end flexget stuff
 
 # create path to store deluge python eggs
