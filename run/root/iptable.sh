@@ -2,7 +2,7 @@
 
 # change openvpn config 'tcp-client' to compatible iptables 'tcp'
 if [[ "${VPN_PROTOCOL}" == "tcp-client" ]]; then
-       export VPN_PROTOCOL="tcp"
+	export VPN_PROTOCOL="tcp"
 fi
 
 # ip route
@@ -187,5 +187,5 @@ echo "--------------------"
 
 # change iptable 'tcp' to openvpn config compatible 'tcp-client' (this file is sourced)
 if [[ "${VPN_PROTOCOL}" == "tcp" ]]; then
-       export VPN_PROTOCOL="tcp-client"
+	export VPN_PROTOCOL="tcp-client"
 fi
