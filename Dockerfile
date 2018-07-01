@@ -13,7 +13,7 @@ ADD build/root/*.sh /root/
 # add bash script to setup iptables
 ADD run/root/*.sh /root/
 
-# add bash script to run deluge & flexget
+# add bash script to run deluge and flexget
 ADD run/nobody/*.sh /home/nobody/
 
 # add python script to configure deluge
@@ -36,9 +36,6 @@ ADD bashrc /home/nobody/.bashrc
 
 # map /config to host defined config path (used to store configuration from app)
 VOLUME /config
-
-# map /data to host defined data path (used to store data from app)
-VOLUME /data
 
 # map /Media to host defined save path (used to store Media from app)
 VOLUME /Media
