@@ -25,10 +25,8 @@ if [[ "${VPN_ENABLED}" == "no" ]]; then
 	# run deluge daemon (daemonized, non-blocking)
 	echo "[info] Attempting to start Deluge..."
 	/usr/bin/deluged -c /config -L info -l /config/deluged.log
-	
 	# run script to check we don't have any torrents in an error state
 	/home/nobody/torrentcheck.sh
-	
 	# run cat to prevent script exit
 	cat
 
@@ -181,10 +179,8 @@ else
 				fi
 
 				echo "[info] Deluge started"
-                                
 				# run script to check we don't have any torrents in an error state
 				/home/nobody/torrentcheck.sh
-				
 			fi
 
 			# set deluge ip and port to current vpn ip and port (used when checking for changes on next run)
