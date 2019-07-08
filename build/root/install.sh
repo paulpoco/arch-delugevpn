@@ -3,13 +3,31 @@
 # exit script if return code != 0
 set -e
 
+# resetting to live repo and using pacman for this app.
+echo 'Server = http://mirror.bytemark.co.uk/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
+echo 'Server = http://archlinux.mirrors.uk2.net/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+
+# sync package databases for pacman
+pacman -Syyu --noconfirm
+
+# build scripts
+####
+
+# download build scripts from github
+curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/scripts-master.zip -L https://github.com/binhex/scripts/archive/master.zip
+
+# unzip build scripts
+unzip /tmp/scripts-master.zip -d /tmp
+
+# move shell scripts to /root
+mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
+
 # pacman packages
 ####
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
-pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify python2-pillow gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2"
-
+pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify python2-pillow gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2 deluge"
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
 	pacman -S --needed $pacman_packages --noconfirm
@@ -28,7 +46,7 @@ source /root/arc.sh
 ####
 
 # define arch official repo (aor) packages
-aor_packages="deluge"
+aor_packages=""
 
 # call aor script (arch official repo)
 source /root/aor.sh
