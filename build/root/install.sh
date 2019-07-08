@@ -3,8 +3,6 @@
 # exit script if return code != 0
 set -e
 
-
-
 # build scripts
 ####
 
@@ -302,6 +300,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[warn] ENABLE_PRIVOXY not defined (via -e ENABLE_PRIVOXY), defaulting to 'no'" | ts '%Y-%m-%d %H:%M:%.S'
 		export ENABLE_PRIVOXY="no"
 	fi
+	
+	export RUN_UP_SCRIPT="yes"
 
 fi
 
