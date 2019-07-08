@@ -53,6 +53,8 @@ docker run -d \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e NAME_SERVERS=<name server ip(s)> \
+    -e DELUGE_DAEMON_LOG_LEVEL=<log level> \
+    -e DELUGE_WEB_LOG_LEVEL=<log level> \
     -e DEBUG=<true|false> \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
@@ -92,6 +94,8 @@ Default password for the webui is "deluge"
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=209.222.18.222,37.235.1.174,1.1.1.1,8.8.8.8,209.222.18.218,37.235.1.177,1.0.0.1,8.8.4.4 \
+     -e DELUGE_DAEMON_LOG_LEVEL=info \
+     -e DELUGE_WEB_LOG_LEVEL=info \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
@@ -127,6 +131,8 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4 \
+     -e DELUGE_DAEMON_LOG_LEVEL=info \
+     -e DELUGE_WEB_LOG_LEVEL=info \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
