@@ -23,7 +23,7 @@ source /root/upd.sh
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
-pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify python2-pillow python2-pip nano gcc pkg-config freetype2 deluge"
+pacman_packages="unzip unrar libtorrent-rasterbar openssl python-chardet python-dbus python-distro python-geoip python-idna python-mako python-pillow python-pyopenssl python-rencode python-service-identity python-setproctitle python-six python-twisted python-xdg python-zope-interface xdg-utils libappindicator-gtk3 python-pip nano gcc pkg-config freetype2 deluge"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
