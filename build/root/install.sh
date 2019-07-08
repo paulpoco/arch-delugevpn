@@ -189,8 +189,10 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	fi
 	
 	echo "[info] OpenVPN config file (ovpn extension) is located at ${VPN_CONFIG}" | ts '%Y-%m-%d %H:%M:%.S'
+	
 	# convert CRLF (windows) to LF (unix) for ovpn
-	/root/dos2unix-wrapper.sh "${VPN_CONFIG}"
+	/usr/bin/dos2unix "${VPN_CONFIG}"
+	
 	# get first matching 'remote' line in ovpn 
 	vpn_remote_line=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '^(\s+)?remote\s.*')
 	if [ -n "${vpn_remote_line}" ]; then
