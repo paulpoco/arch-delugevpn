@@ -49,11 +49,11 @@ mkdir -p /home/nobody/.cache/pip
 mkdir -p /home/nobody/.cache/pip/http
 
 # start install flextget
-pip2 install --upgrade pip
-pip2 install --upgrade funcsigs
-pip2 install --upgrade requests[security]
-pip2 install --upgrade setuptools
-pip2 install --upgrade flexget
+pip install --upgrade pip
+pip install --upgrade funcsigs
+pip install --upgrade requests[security]
+pip install --upgrade setuptools
+pip install --upgrade flexget
 # end install flexget
 
 # end flexget stuff
