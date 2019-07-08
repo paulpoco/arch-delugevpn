@@ -62,25 +62,30 @@ while true; do
 			# check if deluge-web is running
 			if ! pgrep -fa "deluge-web" > /dev/null; then
 
- 				echo "[info] Deluge Web UI not running"
+				echo "[info] Deluge Web UI not running"
 
- 			else
+			else
 
- 				deluge_web_running="true"
+				deluge_web_running="true"
 
- 			fi
+			fi
 
-			# check if privoxy is running, if not then skip shutdown of process
-			if ! pgrep -fa "privoxy" > /dev/null; then
+			if [[ "${ENABLE_PRIVOXY}" == "yes" ]]; then
 
- 				echo "[info] Privoxy not running"
+				# check if privoxy is running, if not then skip shutdown of process
+				if ! pgrep -fa "privoxy" > /dev/null; then
 
- 			else
+					echo "[info] Privoxy not running"
 
- 				# mark as privoxy as running
-				privoxy_running="true"
+				else
 
- 			fi			
+					# mark as privoxy as running
+					privoxy_running="true"
+
+				fi
+
+			fi
+
 			# run scripts to identify external ip address
 			source /home/nobody/getvpnextip.sh
 
@@ -135,13 +140,17 @@ while true; do
 				source /home/nobody/deluge.sh
 
 			fi
-			
-			if [[ "${privoxy_running}" == "false" ]]; then
 
- 				# run script to start privoxy
-				source /home/nobody/privoxy.sh
+			if [[ "${ENABLE_PRIVOXY}" == "yes" ]]; then
 
- 			fi
+				if [[ "${privoxy_running}" == "false" ]]; then
+
+					# run script to start privoxy
+					source /home/nobody/privoxy.sh
+
+				fi
+
+			fi
 
 		else
 
@@ -158,33 +167,37 @@ while true; do
 
 		else
 
- 			deluge_running="true"
+			deluge_running="true"
 
- 		fi
+		fi
 
- 		# check if deluge-web is running
+		# check if deluge-web is running
 		if ! pgrep -fa "deluge-web" > /dev/null; then
 
- 			echo "[info] Deluge Web UI not running"
+			echo "[info] Deluge Web UI not running"
 
- 		else
+		else
 
- 			deluge_web_running="true"
+			deluge_web_running="true"
 
- 		fi
-		
-		# check if privoxy is running, if not then start via privoxy.sh
-		if ! pgrep -fa "privoxy" > /dev/null; then
+		fi
 
- 			echo "[info] Privoxy not running"
+		if [[ "${ENABLE_PRIVOXY}" == "yes" ]]; then
 
- 			# run script to start privoxy
-			source /home/nobody/privoxy.sh
+			# check if privoxy is running, if not then start via privoxy.sh
+			if ! pgrep -fa "privoxy" > /dev/null; then
 
- 		fi
+				echo "[info] Privoxy not running"
 
- 		if [[ "${deluge_running}" == "false" || "${deluge_web_running}" == "false" ]]; then
-		
+				# run script to start privoxy
+				source /home/nobody/privoxy.sh
+
+			fi
+
+		fi
+
+		if [[ "${deluge_running}" == "false" || "${deluge_web_running}" == "false" ]]; then
+
 			# run script to start deluge
 			source /home/nobody/deluge.sh
 
