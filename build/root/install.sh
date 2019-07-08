@@ -8,7 +8,7 @@ set -e
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
-pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2"
+pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-twisted python2-notify python2-pillow gnu-netcat ipcalc python2-pip nano gcc pkg-config freetype2"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
