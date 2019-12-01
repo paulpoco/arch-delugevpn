@@ -13,13 +13,13 @@ curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-ti
 unzip /tmp/scripts-master.zip -d /tmp
 
 # move shell scripts to /root
-mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
+mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
 
 # pacman packages
 ####
 
 # call pacman db and package updater script
-source /root/upd.sh
+source upd.sh
 
 # define pacman packages
 # following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
@@ -37,7 +37,7 @@ fi
 aur_packages=""
 
 # call aur install script (arch user repo)
-source /root/aur.sh
+source aur.sh
 
 # tweaks
 ####
