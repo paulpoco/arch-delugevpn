@@ -315,7 +315,9 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[warn] ENABLE_PRIVOXY not defined (via -e ENABLE_PRIVOXY), defaulting to 'no'" | ts '%Y-%m-%d %H:%M:%.S'
 		export ENABLE_PRIVOXY="no"
 	fi
-	
+
+	export APPLICATION="deluge"
+
 fi
 
 EOF
