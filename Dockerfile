@@ -1,23 +1,23 @@
-FROM binhex/arch-openvpn
+FROM binhex/arch-int-openvpn:latest
 MAINTAINER paulpoco
 
 # additional files
 ##################
 
 # add supervisor conf file for app
-ADD setup/*.conf /etc/supervisor/conf.d/
+ADD build/*.conf /etc/supervisor/conf.d/
 
 # add bash scripts to install app
-ADD setup/root/*.sh /root/
+ADD build/root/*.sh /root/
 
 # add bash script to setup iptables
-ADD apps/root/*.sh /root/
+ADD run/root/*.sh /root/
 
-# add bash script to run deluge & flexget
-ADD apps/nobody/*.sh /home/nobody/
+# add bash script to run deluge and flexget
+ADD run/nobody/*.sh /home/nobody/
 
 # add python script to configure deluge
-ADD apps/nobody/*.py /home/nobody/
+ADD run/nobody/*.py /home/nobody/
 
 # add pre-configured config files for deluge
 ADD config/nobody/ /home/nobody/
@@ -36,9 +36,6 @@ ADD bashrc /home/nobody/.bashrc
 
 # map /config to host defined config path (used to store configuration from app)
 VOLUME /config
-
-# map /data to host defined data path (used to store data from app)
-VOLUME /data
 
 # map /Media to host defined save path (used to store Media from app)
 VOLUME /Media
@@ -66,4 +63,4 @@ EXPOSE 3539
 #################
 
 # run script to set uid, gid and permissions
-CMD ["/bin/bash", "/root/init.sh"]
+CMD ["/bin/bash", "/usr/local/bin/init.sh"] 

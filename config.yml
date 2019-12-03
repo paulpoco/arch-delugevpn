@@ -1,4 +1,4 @@
-# dummy config.yml
+# dummy config.yml please research flexget.com for correct config file format
 web_server:
   bind: 0.0.0.0
   port: 3539

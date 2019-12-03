@@ -47,34 +47,32 @@ docker run -d \
     -e VPN_ENABLED=<yes|no> \
     -e VPN_USER=<vpn username> \
     -e VPN_PASS=<vpn password> \
-    -e VPN_REMOTE=<vpn remote gateway> \
-    -e VPN_PORT=<vpn remote port> \
-    -e VPN_PROTOCOL=<vpn remote protocol> \
-    -e VPN_DEVICE_TYPE=<tun|tap> \
     -e VPN_PROV=<pia|airvpn|custom> \
+    -e VPN_OPTIONS=<additional openvpn cli options> \
+    -e STRICT_PORT_FORWARD=<yes|no> \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e NAME_SERVERS=<name server ip(s)> \
+    -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
+    -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DEBUG=<true|false> \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
     binhex/arch-delugevpn
 ```
-
+&nbsp;
 Please replace all user variables in the above command defined by <> with the correct values.
 
 **Access Deluge**
+
+Default password for the webui is "deluge"
 
 `http://<host ip>:8112`
 
 **Access Privoxy**
 
 `http://<host ip>:8118`
-
-**PIA provider**
-
-PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOTE (list of gateways https://www.privateinternetaccess.com/pages/client-support) if you wish to use another remote gateway other than the Netherlands.
 
 **PIA example**
 ```
@@ -91,22 +89,20 @@ PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOT
      -e VPN_ENABLED=yes \
      -e VPN_USER=myusername \
      -e VPN_PASS=mypassword \
-     -e VPN_REMOTE=nl.privateinternetaccess.com \
-     -e VPN_PORT=1198 \
-     -e VPN_PROTOCOL=udp \
-     -e VPN_DEVICE_TYPE=tun \
      -e VPN_PROV=pia \
-     -e STRONG_CERTS=no \
+     -e STRICT_PORT_FORWARD=yes \
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
-     -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
+     -e NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1 \
+     -e DELUGE_DAEMON_LOG_LEVEL=info \
+     -e DELUGE_WEB_LOG_LEVEL=info \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
      -e PGID=0 \
      binhex/arch-delugevpn
 ```
-
+&nbsp;
 **AirVPN provider**
 
 AirVPN users will need to generate a unique OpenVPN configuration file by using the following link https://airvpn.org/generator/
@@ -131,32 +127,42 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      -v /apps/docker/deluge/config:/config \
      -v /etc/localtime:/etc/localtime:ro \
      -e VPN_ENABLED=yes \
-     -e VPN_REMOTE=nl.vpn.airdns.org \
-     -e VPN_PORT=443 \
-     -e VPN_PROTOCOL=udp \
-     -e VPN_DEVICE_TYPE=tun \
      -e VPN_PROV=airvpn \
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
-     -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
+     -e NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1 \
+     -e DELUGE_DAEMON_LOG_LEVEL=info \
+     -e DELUGE_WEB_LOG_LEVEL=info \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
      -e PGID=0 \
      binhex/arch-delugevpn
 ```
-
+&nbsp;
 **Notes**
 
-Default password for the webui is "deluge"
+Please note this Docker image does not include the required OpenVPN configuration file and certificates. These will typically be downloaded from your VPN providers website (look for OpenVPN configuration files), and generally are zipped.
+
+PIA users - The URL to download the OpenVPN configuration files and certs is:-
+
+https://www.privateinternetaccess.com/openvpn/openvpn.zip
+
+Once you have downloaded the zip (normally a zip as they contain multiple ovpn files) then extract it to /config/openvpn/ folder (if that folder doesn't exist then start and stop the docker container to force the creation of the folder).
+
+If there are multiple ovpn files then please delete the ones you don't want to use (normally filename follows location of the endpoint) leaving just a single ovpn file and the certificates referenced in the ovpn file (certificates will normally have a crt and/or pem extension).
+
+Due to Google and OpenDNS supporting EDNS Client Subnet it is recommended NOT to use either of these NS providers.
+The list of default NS providers in the above example(s) is as follows:-
+
+209.222.x.x = PIA
+84.200.x.x = DNS Watch
+37.235.x.x = FreeDNS
+1.x.x.x = Cloudflare
 
 User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
 
-```
-id <username>
-```
-The STRONG_CERTS environment variable is used to define whether to use strong certificates and enhanced encryption ciphers when connecting to PIA (does not affect other providers).
-
+`id <username>`
 ___
 If you appreciate Binhex's work, then please consider buying him a beer  :D
 
