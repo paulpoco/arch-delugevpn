@@ -69,6 +69,7 @@ pip install --upgrade pip
 pip install --upgrade funcsigs
 pip install --upgrade requests[security]
 pip install --upgrade setuptools
+pip install --upgrade wheel
 pip install --upgrade deluge-client
 pip install --upgrade flexget
 # end install flexget
