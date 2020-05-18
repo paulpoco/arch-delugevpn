@@ -55,6 +55,7 @@ docker run -d \
     -e NAME_SERVERS=<name server ip(s)> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
+    -e ADDITIONAL_PORTS=<port number(s)> \
     -e DEBUG=<true|false> \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
@@ -96,6 +97,7 @@ Default password for the webui is "deluge"
      -e NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1 \
      -e DELUGE_DAEMON_LOG_LEVEL=info \
      -e DELUGE_WEB_LOG_LEVEL=info \
+     -e ADDITIONAL_PORTS=1234 \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
@@ -133,6 +135,7 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      -e NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1 \
      -e DELUGE_DAEMON_LOG_LEVEL=info \
      -e DELUGE_WEB_LOG_LEVEL=info \
+     -e ADDITIONAL_PORTS=1234 \
      -e DEBUG=false \
      -e UMASK=000 \
      -e PUID=0 \
