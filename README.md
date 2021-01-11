@@ -2,10 +2,9 @@ This is a fork of the fine work of Binhex at https://github.com/binhex/arch-delu
 
 **Application**
 
-[Flexget website](http://flexget.com/)    
-[Deluge website](http://deluge-torrent.org/) 
-
-[OpenVPN website](https://openvpn.net/)  
+[Flexget](http://flexget.com/)    
+[Deluge](http://deluge-torrent.org/) 
+[OpenVPN](https://openvpn.net/)  
 [WireGuard](https://www.wireguard.com/)
 
 **Description Binhex's DelugeVPN**
@@ -149,8 +148,7 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
 &nbsp;
 **Notes**
 
-OpenVPN
-=======
+**Notes - OpenVPN**
 Please note this Docker image does not include the required OpenVPN configuration file and certificates. These will typically be downloaded from your VPN providers website (look for OpenVPN configuration files), and generally are zipped.
 
 PIA users - The URL to download the OpenVPN configuration files and certs is:-
@@ -161,9 +159,10 @@ Once you have downloaded the zip (normally a zip as they contain multiple ovpn f
 
 If there are multiple ovpn files then please delete the ones you don't want to use (normally filename follows location of the endpoint) leaving just a single ovpn file and the certificates referenced in the ovpn file (certificates will normally have a crt and/or pem extension).
 
-WireGuard
+**Notes - WireGuard**
 =========
-Due to the enhanced security and kernel integration, WireGuard will require the container to be defined with privileged permissions, so please ensure you change the following from:-
+Due to the enhanced security and kernel integration, WireGuard will require the container to be defined with privileged permissions, so please ensure you change the following
+from:-
 ```
     --cap-add=NET_ADMIN \
 ```
@@ -172,8 +171,7 @@ to
     --privileged=true \
 ```
 
-Various
-=======
+**Notes - Various**
 Due to Google and OpenDNS supporting EDNS Client Subnet it is recommended NOT to use either of these NS providers.
 The list of default NS providers in the above example(s) is as follows:-
 
