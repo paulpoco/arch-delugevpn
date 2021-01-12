@@ -98,9 +98,9 @@ for vpn_remote_port_item in "${vpn_remote_port_list[@]}"; do
 
 	for vpn_remote_protocol_item in "${vpn_remote_endpoint_protocol_list[@]}"; do
 
-			# note grep -e is required to indicate no flags follow to prevent -A from being incorrectly picked up
-			rule_exists=$(iptables -S | grep -e "-A INPUT -i "${docker_interface}" -p "${vpn_remote_protocol_item}" -m "${vpn_remote_protocol_item}" --sport "${vpn_remote_port_item}" -j ACCEPT")
-	
+		# note grep -e is required to indicate no flags follow to prevent -A from being incorrectly picked up
+		rule_exists=$(iptables -S | grep -e "-A INPUT -i "${docker_interface}" -p "${vpn_remote_protocol_item}" -m "${vpn_remote_protocol_item}" --sport "${vpn_remote_port_item}" -j ACCEPT")
+
 		if [[ -z "${rule_exists}" ]]; then
 			# accept input to vpn gateway
 			iptables -A INPUT -i "${docker_interface}" -p "${vpn_remote_protocol_item}" --sport "${vpn_remote_port_item}" -j ACCEPT
@@ -128,12 +128,12 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "[info] Adding additional incoming port ${additional_port_item} for ${docker_interface}"
-
+		
 		for additional_port_protocol_item in "${additional_port_protocol_list[@]}"; do
 			# accept input to additional port for "${docker_interface}"
 			iptables -A INPUT -i "${docker_interface}" -p "${additional_port_protocol_item}" --dport "${additional_port_item}" -j ACCEPT
 			iptables -A INPUT -i "${docker_interface}" -p "${additional_port_protocol_item}" --sport "${additional_port_item}" -j ACCEPT
-			
+
 		done
 
 	done
@@ -168,10 +168,10 @@ iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 # forward iptable rules
 ###
 
- # set policy to drop ipv4 for forward
+# set policy to drop ipv4 for forward
 iptables -P FORWARD DROP
 
- # set policy to drop ipv6 for forward
+# set policy to drop ipv6 for forward
 ip6tables -P FORWARD DROP 1>&- 2>&-
 
 # output iptable rules
@@ -193,12 +193,12 @@ for vpn_remote_port_item in "${vpn_remote_port_list[@]}"; do
 
 		# note grep -e is required to indicate no flags follow to prevent -A from being incorrectly picked up
 		rule_exists=$(iptables -S | grep -e "-A OUTPUT -o "${docker_interface}" -p "${vpn_remote_protocol_item}" -m "${vpn_remote_protocol_item}" --dport "${vpn_remote_port_item}" -j ACCEPT")
-		
+
 		if [[ -z "${rule_exists}" ]]; then
-			# accept output from vpn gateway
+			# accept output to vpn gateway
 			iptables -A OUTPUT -o "${docker_interface}" -p "${vpn_remote_protocol_item}" --dport "${vpn_remote_port_item}" -j ACCEPT
 		fi
-		
+
 	done
 
 done
@@ -239,7 +239,7 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 			# accept output to additional port for lan interface
 			iptables -A OUTPUT -o "${docker_interface}" -p "${additional_port_protocol_item}" --dport "${additional_port_item}" -j ACCEPT
 			iptables -A OUTPUT -o "${docker_interface}" -p "${additional_port_protocol_item}" --sport "${additional_port_item}" -j ACCEPT
-			
+
 		done
 
 	done
