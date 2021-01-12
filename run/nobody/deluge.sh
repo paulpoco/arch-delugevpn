@@ -6,23 +6,23 @@ if [[ "${deluge_running}" == "false" ]]; then
 
 	echo "[info] Removing deluge pid file (if it exists)..."
 	rm -f /config/deluged.pid
-	
+
 	# set listen interface ip address for deluge using python script
 	/home/nobody/config_deluge.py "/config/core.conf" "listen_interface" "${vpn_ip}"
-	
+
 	# set outgoing interface name for deluge using python script
 	/home/nobody/config_deluge.py "/config/core.conf" "outgoing_interface" "${VPN_DEVICE_TYPE}"
 
 	if [ -f  "/config/hostlist.conf" ]; then
 
- 		# get host id for daemon, used to auto login web ui (see next step)
+		# get host id for daemon, used to auto login web ui (see next step)
 		host_id=$(cat /config/hostlist.conf | grep -E -o -m 1 '[a-z0-9]{32,256}')
 
- 		# set web ui to auto login using host id for locally running daemon
+		# set web ui to auto login using host id for locally running daemon
 		/home/nobody/config_deluge.py "/config/web.conf" "default_daemon" "${host_id}"
 
- 	fi
-	
+	fi
+
 	# run deluge daemon (daemonized, non-blocking)
 	/usr/bin/deluged -c /config -L "${DELUGE_DAEMON_LOG_LEVEL}" -l /config/deluged.log
 
@@ -48,7 +48,6 @@ if [[ "${deluge_running}" == "false" ]]; then
 					echo "[debug] Re-check in ${retry_wait} secs..."
 					echo "[debug] ${retry_count} retries left"
 				fi
-
 				sleep "${retry_wait}s"
 
 			fi
@@ -67,14 +66,14 @@ if [[ "${deluge_running}" == "false" ]]; then
 	while [[ $(netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".58846\"") == "" ]]; do
 		sleep 0.1
 	done
-	
+
 	echo "[info] Deluge process listening on port 58846"
 
 else
 
- 	# set listen interface ip address for deluge
+	# set listen interface ip address for deluge
 	/usr/bin/deluge-console -c /config "config --set listen_interface ${vpn_ip}"
-	
+
 fi
 
 # change incoming port using the deluge console
@@ -102,7 +101,7 @@ if [[ "${deluge_web_running}" == "false" ]]; then
 	nohup /usr/bin/deluge-web -c /config -L "${DELUGE_WEB_LOG_LEVEL}" -l /config/deluge-web.log &
 	
 	echo "[info] Deluge Web UI started"
-	
+
 fi
 
 # set deluge ip to current vpn ip (used when checking for changes on next run)
