@@ -28,7 +28,7 @@ fi
 source upd.sh
 
 # define pacman packages
-# following needed for flextget are unzip unrar python2-twisted python2-pip nano gcc pkg-config freetype2
+# following needed for flextget are unzip unrar python-twisted python-pip nano gcc pkg-config freetype2
 pacman_packages="unzip unrar libtorrent-rasterbar openssl python-chardet python-dbus python-distro python-geoip python-idna python-mako python-pillow python-pyopenssl python-rencode python-service-identity python-setproctitle python-six python-future python-requests python-twisted python-xdg python-zope-interface xdg-utils libappindicator-gtk3 python-pip nano gcc pkg-config freetype2 deluge"
 
 # install compiled packages using pacman
@@ -138,7 +138,13 @@ rm /tmp/permissions_heredoc
 ####
 
 cat <<'EOF' > /tmp/envvars_heredoc
-
+export DELUGE_DAEMON_LOG_LEVEL=$(echo "${DELUGE_DAEMON_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')	
+if [[ ! -z "${DELUGE_DAEMON_LOG_LEVEL}" ]]; then	
+	echo "[info] DELUGE_DAEMON_LOG_LEVEL defined as '${DELUGE_DAEMON_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'	
+else	
+	echo "[info] DELUGE_DAEMON_LOG_LEVEL not defined,(via -e DELUGE_DAEMON_LOG_LEVEL), defaulting to 'info'" | ts '%Y-%m-%d %H:%M:%.S'	
+	export DELUGE_DAEMON_LOG_LEVEL="info"	
+fi
 export DELUGE_WEB_LOG_LEVEL=$(echo "${DELUGE_WEB_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 if [[ ! -z "${DELUGE_WEB_LOG_LEVEL}" ]]; then
 	echo "[info] DELUGE_WEB_LOG_LEVEL defined as '${DELUGE_WEB_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
