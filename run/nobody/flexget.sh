@@ -18,10 +18,10 @@ else
   chmod +x /home/nobody/.flexget/config.yml
 fi
 
-# if FLEXGET_WEBUI_PASSWORD not specified then use default FLEXGET_WEBUI_PASSWORD = flexpass 
+# if FLEXGET_WEBUI_PASSWORD not specified then use default FLEXGET_WEBUI_PASSWORD = flexpass1234 
 if [[ -z "${FLEXGET_WEBUI_PASSWORD}" ]]; then
-	FLEXGET_WEBUI_PASSWORD="flexpass"
-	echo "Using default Flexget-webui password of flexpass"
+	FLEXGET_WEBUI_PASSWORD="flexpass1234"
+	echo "Using default Flexget-webui password of flexpass1234"
 else
 	echo "Using userdefined Flexget-webui password of " "${FLEXGET_WEBUI_PASSWORD}"
 fi
