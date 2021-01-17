@@ -11,4 +11,4 @@ tasks:
     series:
       - some open source tv series 1
       - some open source tv series 2
-    download: /Media
+    download: /data
