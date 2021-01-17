@@ -46,7 +46,7 @@ if os.path.exists(deluge_conf_path):
     else:
 
         print("[info] Deluge key '%s' currently has an undefined value" % (key))
-        
+
     print("[info] Deluge key '%s' will have a new value '%s'" % (key, value))
 
     # define the new value

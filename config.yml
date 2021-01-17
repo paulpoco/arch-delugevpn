@@ -9,6 +9,6 @@ tasks:
   taskname:
     rss: http://example.com/torrents.xml
     series:
-      - some open source series 1
-      - some open source series 2
-    download: /Media
+      - some open source tv series 1
+      - some open source tv series 2
+    download: /data

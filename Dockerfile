@@ -1,4 +1,4 @@
-FROM binhex/arch-int-openvpn:latest
+FROM binhex/arch-int-vpn:latest
 MAINTAINER paulpoco
 
 # additional files
@@ -37,10 +37,10 @@ ADD bashrc /home/nobody/.bashrc
 # map /config to host defined config path (used to store configuration from app)
 VOLUME /config
 
-# map /Media to host defined save path (used to store Media from app)
-VOLUME /Media
+# map /data to host defined data path (used to store data from app)
+VOLUME /data
 
-# map /home/nobody/.flexget to host defined data path (used to store data from flexget)
+# map /home/nobody/.flexget to host defined flexget config path (used to store data from flexget)
 VOLUME /home/nobody/.flexget
 
 # expose port for deluge webui

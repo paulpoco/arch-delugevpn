@@ -2,15 +2,16 @@ This is a fork of the fine work of Binhex at https://github.com/binhex/arch-delu
 
 **Application**
 
-[Flexget website](http://flexget.com/)    
-[Deluge website](http://deluge-torrent.org/) 
-
-[OpenVPN website](https://openvpn.net/)  
-[Privoxy website](http://www.privoxy.org/)
+[Flexget](http://flexget.com/)    
+[Deluge](http://deluge-torrent.org/) 
+[OpenVPN](https://openvpn.net/)  
+[WireGuard](https://www.wireguard.com/)
 
 **Description Binhex's DelugeVPN**
 
-Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows. It uses ​libtorrent in its backend and features multiple user-interfaces including: GTK+, web and console. It has been designed using the client server model with a daemon process that handles all the bittorrent activity. The Deluge daemon is able to run on headless machines with the user-interfaces being able to connect remotely from any platform. This Docker includes OpenVPN to ensure a secure and private connection to the Internet, including use of iptables to prevent IP leakage when the tunnel is down. It also includes Privoxy to allow unfiltered access to index sites, to use Privoxy please point your application at `http://<host ip>:8118`.
+Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows. It uses ​libtorrent in its backend and features multiple user-interfaces including: GTK+, web and console. It has been designed using the client server model with a daemon process that handles all the bittorrent activity. The Deluge daemon is able to run on headless machines with the user-interfaces being able to connect remotely from any platform.
+
+This Docker includes OpenVPN and WireGuard to ensure a secure and private connection to the Internet, including use of iptables to prevent IP leakage when the tunnel is down. It also includes Privoxy to allow unfiltered access to index sites, to use Privoxy please point your application at `http://<host ip>:8118`.
 
 **Description Flexget with webui daemon**
 
@@ -28,8 +29,9 @@ FlexGet is a multipurpose automation tool for content like torrents, nzbs, podca
 **Build notes**
 
 Latest stable Deluge release from Arch Linux repo.
-Latest stable OpenVPN release from Arch Linux repo.
 Latest stable Privoxy release from Arch Linux repo.
+Latest stable OpenVPN release from Arch Linux repo. 
+Latest stable WireGuard release from Arch Linux repo.
 Latest stable Flexget release from Python.
 
 **Usage**
@@ -48,13 +50,14 @@ docker run -d \
     -e VPN_USER=<vpn username> \
     -e VPN_PASS=<vpn password> \
     -e VPN_PROV=<pia|airvpn|custom> \
+    -e VPN_CLIENT=<openvpn|wireguard> \
     -e VPN_OPTIONS=<additional openvpn cli options> \
     -e STRICT_PORT_FORWARD=<yes|no> \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e NAME_SERVERS=<name server ip(s)> \
-    -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
-    -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
+    -e DELUGE_DAEMON_LOG_LEVEL=<info|warning|error|none|debug|trace|garbage> \
+    -e DELUGE_WEB_LOG_LEVEL=<info|warning|error|none|debug|trace|garbage> \
     -e ADDITIONAL_PORTS=<port number(s)> \
     -e DEBUG=<true|false> \
     -e UMASK=<umask for created files> \
@@ -91,6 +94,7 @@ Default password for the webui is "deluge"
      -e VPN_USER=myusername \
      -e VPN_PASS=mypassword \
      -e VPN_PROV=pia \
+     -e VPN_CLIENT=openvpn \
      -e STRICT_PORT_FORWARD=yes \
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
@@ -130,6 +134,7 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      -v /etc/localtime:/etc/localtime:ro \
      -e VPN_ENABLED=yes \
      -e VPN_PROV=airvpn \
+     -e VPN_CLIENT=openvpn \
      -e ENABLE_PRIVOXY=yes \
      -e LAN_NETWORK=192.168.1.0/24 \
      -e NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1 \
@@ -143,8 +148,8 @@ AirVPN users will need to generate a unique OpenVPN configuration file by using 
      binhex/arch-delugevpn
 ```
 &nbsp;
-**Notes**
 
+**OpenVPN**
 Please note this Docker image does not include the required OpenVPN configuration file and certificates. These will typically be downloaded from your VPN providers website (look for OpenVPN configuration files), and generally are zipped.
 
 PIA users - The URL to download the OpenVPN configuration files and certs is:-
@@ -155,6 +160,23 @@ Once you have downloaded the zip (normally a zip as they contain multiple ovpn f
 
 If there are multiple ovpn files then please delete the ones you don't want to use (normally filename follows location of the endpoint) leaving just a single ovpn file and the certificates referenced in the ovpn file (certificates will normally have a crt and/or pem extension).
 
+**WireGuard**
+If you wish to use WireGuard (defined via 'VPN_CLIENT' env var value ) then due to the enhanced security and kernel integration WireGuard will require the container to be defined with privileged permissions and sysctl support, so please ensure you change the following docker options:- 
+from
+```
+    --cap-add=NET_ADMIN \
+```
+to
+```
+    --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+    --privileged=true \
+```
+
+PIA users - The WireGuard configuration file will be auto generated and will be stored in ```/config/wireguard/wg0.conf``` AFTER the first run, if you wish to change the endpoint you are connecting to then change the ```Endpoint``` line in the config file (default is Netherlands).
+
+Other users - Please download your WireGuard configuration file from your VPN provider, start and stop the container to generate the folder ```/config/wireguard/``` and then place your WireGuard configuration file in there.
+
+**Notes**  
 Due to Google and OpenDNS supporting EDNS Client Subnet it is recommended NOT to use either of these NS providers.
 The list of default NS providers in the above example(s) is as follows:-
 
