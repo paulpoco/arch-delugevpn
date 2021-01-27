@@ -28,4 +28,4 @@ fi
 
 # run flexget set webui password and run daemon
 /usr/bin/flexget web passwd "${FLEXGET_WEBUI_PASSWORD}"
-/usr/bin/flexget -c /home/nobody/.flexget/config.yml daemon start
+/usr/bin/flexget -c /home/nobody/.flexget/config.yml --loglevel "${FLEXGET_LOG_LEVEL:-debug}" daemon start --autoreload-config

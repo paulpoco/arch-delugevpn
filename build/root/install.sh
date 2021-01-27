@@ -29,11 +29,11 @@ source upd.sh
 
 # define pacman packages
 # following needed for flextget are unzip unrar python-twisted python-pip nano gcc pkg-config freetype2
-pacman_packages="unzip unrar libtorrent-rasterbar openssl python-chardet python-dbus python-distro python-geoip python-idna python-mako python-pillow python-pyopenssl python-rencode python-service-identity python-setproctitle python-six python-future python-requests python-twisted python-xdg python-zope-interface xdg-utils libappindicator-gtk3 python-pip nano gcc pkg-config freetype2 deluge"
+pacman_packages="libtorrent-rasterbar openssl python-chardet python-dbus python-distro python-geoip python-idna python-mako python-pillow python-pyopenssl python-rencode python-service-identity python-setproctitle python-six python-future python-requests python-twisted python-xdg python-zope-interface xdg-utils libappindicator-gtk3 deluge unzip unrar python-pip nano gcc pkg-config freetype2 ca-certificates nodejs"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
-	pacman -S --needed $pacman_packages --noconfirm
+  	pacman -S --needed $pacman_packages --noconfirm
 fi
 
 # aur packages
@@ -56,11 +56,16 @@ mkdir -p /home/nobody/.cache/pip/http
 
 # start install flextget
 pip install --upgrade pip
+pip install --upgrade urllib3
+pip install --upgrade chardet
+pip install --upgrade certifi
+pip install --upgrade idna
 pip install --upgrade funcsigs
 pip install --upgrade requests[security]
 pip install --upgrade setuptools
 pip install --upgrade wheel
 pip install --upgrade deluge-client
+pip install --upgrade cloudscraper
 pip install --upgrade flexget
 # end install flexget
 
